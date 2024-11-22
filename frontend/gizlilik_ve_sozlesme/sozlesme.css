@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+:root {
+    --primary-color: #1e4d1b;
+    --secondary-color: #fff;
+    --background-image: url('../Anasayfa/background.PNG');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--background-image) no-repeat center;
+    background-size: cover;
+}
+
+
+.navigation a {
+    position: absolute;  /* Konumlandırmayı mutlak yapar */
+    font-size: 1.1em;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 500;
+    right: 0;            /* Sağ kenara yapıştırır */
+    top: 0;              /* Üst kenara yapıştırır */
+    margin-left: 0;      /* Margin'i sıfırlıyoruz, çünkü right ile konumlandırdık */
+}
+
+.navigation a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 3px;
+    background: var(--secondary-color);
+    border-radius: 5px;
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform 0.5s;
+}
+
+.navigation a:hover::after {
+    transform-origin: left;
+    transform: scaleX(1);
+}
+
+.wrapper {
+    position: absolute; 
+    top: 45px;  
+    left: 20px; 
+    width: calc(100vw - 40px); 
+    height: calc(100vh - 40px);
+    background: transparent; 
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px); 
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    overflow: auto;
+    align-items: center;
+    transition: height 0.2s ease, transform 0.3s;
+    
+    color: #000; 
+    margin: 1rem 0.2rem;
+    padding: 20px;
+}
+
+.wrapper ul {
+    list-style-type: none;  /* Liste işaretlerini kaldır */
+    padding: 0;             /* Varsayılan padding'i kaldır */
+    margin: 0;              /* Varsayılan margin'i kaldır */
+}
+
+.wrapper ul li {
+    padding: 10px 0; /* Liste öğeleri arasına dikey boşluk ekler */
+    font-size: 16px;  /* Liste öğesi yazı boyutunu ayarlayabilirsiniz */
+}
+
+.wrapper a {
+    color: #000; 
+    text-decoration: none; 
+}
+
+.wrapper a:hover {
+    color: #1e4d1b;
+    text-decoration: underline;
+}
+

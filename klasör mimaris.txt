@@ -1,0 +1,95 @@
+Node.js projelerinde iyi bir klasör yapısı oluşturmak, kodun daha sürdürülebilir, okunabilir ve genişletilebilir olmasını sağlar. Ancak, Node.js için kesin bir klasör yapısı yoktur, çünkü bu genellikle projenin gereksinimlerine göre değişir. Yine de, çoğu Node.js projesinde yaygın olarak kullanılan bazı klasör yapıları ve önerilen konvansiyonlar vardır.
+
+Aşağıda, popüler bir Node.js uygulama yapısının nasıl olabileceğini adım adım açıklayacağım:
+
+### 1. Temel Klasör Yapısı
+
+```plaintext
+my-app/
+│
+├── node_modules/       # Proje bağımlılıkları
+├── public/             # Statik dosyalar (HTML, CSS, JS, görseller vb.)
+├── src/                # Uygulama kaynak kodları
+│   ├── controllers/    # API veya uygulama mantığı
+│   ├── models/         # Veritabanı modelleri
+│   ├── routes/         # Uygulama yönlendirmeleri
+│   ├── services/       # İş mantığı ve servisler
+│   ├── utils/          # Yardımcı fonksiyonlar
+│   ├── middleware/     # Orta katman yazılımlar (auth, logging, vb.)
+│   ├── config/         # Yapılandırma dosyaları (env değişkenleri)
+│   └── app.js          # Uygulamanın ana başlangıç dosyası
+│
+├── .env                # Ortam değişkenleri (gizli bilgileri saklamak için)
+├── .gitignore          # Git ignore dosyası
+├── package.json        # Proje bağımlılıkları ve komutlar
+├── package-lock.json   # Tam bağımlılık ağacı
+├── README.md           # Proje açıklaması
+└── server.js           # Sunucu başlatma noktası
+```
+
+### 2. Klasör Yapısı Açıklamaları
+
+#### **`node_modules/`**
+- Node.js'in bağımlılıkları burada yer alır. `npm install` komutu çalıştırıldığında bu klasör oluşturulur ve güncellenir.
+
+#### **`public/`**
+- Uygulamanın statik dosyalarını (HTML, CSS, JavaScript, görseller, fontlar vb.) bu klasörde tutabilirsiniz. Eğer bir frontend kısmı varsa, burada yönetebilirsiniz.
+
+#### **`src/`**
+Bu klasör tüm uygulamanın kaynak kodlarını tutar. İçindeki alt klasörler modüler yapıyı korur ve farklı sorumlulukları ayırır.
+
+- **`controllers/`**:
+  - İşlevler (HTTP istekleri) burada yönetilir. Her API endpoint'ine karşılık gelen controller fonksiyonlarını burada bulundurursunuz.
+  - Örnek: `usersController.js`, `authController.js`
+
+- **`models/`**:
+  - Veritabanı şemaları ve modelleri burada bulunur. Eğer Mongoose kullanıyorsanız, Mongoose şemalarını burada tutarsınız.
+  - Örnek: `User.js`, `Product.js`
+
+- **`routes/`**:
+  - Uygulama yönlendirmeleri ve rotaları burada tanımlanır. Bu dosya, belirli bir rota ile ilgili controller'ı çağırır.
+  - Örnek: `userRoutes.js`, `authRoutes.js`
+
+- **`services/`**:
+  - İş mantığı ve karmaşık işlemler burada yer alır. Veritabanı sorguları, dış API çağrıları gibi işlemler burada yapılır.
+  - Örnek: `authService.js`, `paymentService.js`
+
+- **`utils/`**:
+  - Yardımcı fonksiyonlar ve genel kullanıma yönelik araçlar burada bulunur. Örneğin tarih formatlama, validasyon gibi işlemleri bu klasörde tutabilirsiniz.
+  - Örnek: `formatDate.js`, `validators.js`
+
+- **`middleware/`**:
+  - Orta katman yazılımlarını (middleware) burada bulundurursunuz. Örneğin, kimlik doğrulama, erişim kontrolü, logging gibi işlemler burada yapılır.
+  - Örnek: `authMiddleware.js`, `errorHandler.js`
+
+- **`config/`**:
+  - Uygulamanın yapılandırma ayarları burada yer alır. API anahtarları, veritabanı bağlantı ayarları, port numarası gibi değerler burada bulunur.
+  - Örnek: `dbConfig.js`, `appConfig.js`
+
+- **`app.js`**:
+  - Genellikle Express uygulamasının başlatıldığı, route'ların bağlandığı ve middleware'ların eklendiği dosyadır. Bu dosya temel uygulama yapılandırmasını içerir.
+
+#### **`server.js`**
+- Uygulamanın sunucuya bağlanma işlemini başlatan ana dosyadır. Bu dosya `app.js`'i içerir ve sunucu dinlemeye başlar.
+
+#### **Diğer Dosyalar**
+- **`.env`**: Gizli bilgiler (örneğin API anahtarları, veritabanı şifreleri vb.) burada saklanır. Çoğu zaman `dotenv` kütüphanesi ile `.env` dosyasındaki veriler uygulamaya dahil edilir.
+- **`package.json`**: Projeye ait bağımlılıkları, betikleri ve metadata bilgilerini tutar.
+- **`README.md`**: Projenin genel tanıtımı, kurulumu ve kullanım bilgileri burada açıklanır.
+
+### 3. Alternatif Klasör Yapıları
+
+Bazı durumlarda, projenizin büyüklüğüne ve gereksinimlerine göre, farklı yapılandırmalar kullanabilirsiniz:
+
+#### **Monolitik Yapı**:
+Eğer küçük bir proje geliştiriyorsanız ve modüler yapıya çok ihtiyaç duymuyorsanız, yukarıdaki yapıyı sadeleştirerek tüm kaynakları `src/` altına koyabilirsiniz. Böylece sadece bir kaç ana dosya olur: `app.js`, `server.js`, ve tüm modeller, controller’lar tek bir yerde olabilir.
+
+#### **Microservice Yapısı**:
+Eğer microservice mimarisi kullanıyorsanız, her bir servis kendi klasör yapısına sahip olabilir ve `docker-compose.yml` gibi dosyalarla mikro servisler birbirine bağlanabilir. Her mikro servis kendi bağımsız `package.json` dosyasına sahip olabilir.
+
+### 4. Klasör Yapısı Seçimi
+Projenizin büyüklüğüne, ekip boyutuna ve uygulamanın ölçeklenebilirliğine göre farklı yapılar seçebilirsiniz. Küçük bir proje için basit bir yapı yeterli olabilirken, büyük bir uygulama için daha modüler bir yapı gerekebilir.
+
+Node.js projelerinde en önemli şeylerden biri, uygulamanın bakımını kolaylaştırmak ve yeni geliştiriciler için anlaşılabilir bir yapı oluşturmaktır. Bu yüzden uygun bir klasör yapısı seçmek çok önemlidir.
+
+Eğer belirli bir proje için örnek veya daha detaylı öneri isterseniz, daha fazla yardımcı olabilirim!

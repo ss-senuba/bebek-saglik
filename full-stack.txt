@@ -1,0 +1,98 @@
+Frontend ve Backend projelerinizi birbirinden bağımsız bir şekilde yönetmek ve sürdürülebilir bir yapıya kavuşturmak için iyi bir klasör yapısı oluşturmak önemlidir. Hem frontend hem de backend uygulamalarının düzgün çalışabilmesi için her iki tarafı ayrı ayrı düzenlemeniz gerekecek. Aşağıda, bir frontend ve backend için önerilen klasör yapısını ve genel mimarisi gösteriyorum.
+
+### 1. **Proje Klasör Yapısı (Full-Stack Uygulama)**
+
+```
+/my-fullstack-app
+│
+├── /frontend                 # Frontend uygulaması (örneğin React, Vue.js, Angular)
+│   ├── /public               # Statik dosyalar (index.html, favicon.ico, vb.)
+│   ├── /src                  # Kaynak kodları
+│   │   ├── /assets           # Görseller, fontlar, css dosyaları
+│   │   ├── /components       # UI bileşenleri (React components, Vue components, vb.)
+│   │   ├── /pages            # Sayfa bileşenleri (Dashboard, Login, vb.)
+│   │   ├── /services         # API ile iletişim (Axios, Fetch, vb.)
+│   │   ├── /store            # Durum yönetimi (Redux, Vuex, Context API vb.)
+│   │   ├── /styles           # Global CSS/SCSS
+│   │   └── /utils            # Yardımcı fonksiyonlar, yardımcı sınıflar
+│   ├── package.json          # Frontend bağımlılıkları ve betikler
+│   ├── .env                  # Çevresel değişkenler (örneğin API URL'leri)
+│   └── webpack.config.js     # Webpack konfigürasyonu (veya başka bir bundler)
+│
+├── /backend                  # Backend uygulaması (örneğin Node.js/Express, Django, vb.)
+│   ├── /src                  # Backend kaynak kodları
+│   │   ├── /controllers      # API işlevleri (request handler'ları)
+│   │   ├── /models           # Veritabanı modelleri (Mongoose, Sequelize, vb.)
+│   │   ├── /routes           # API rotaları
+│   │   ├── /services         # Backend iş mantığı
+│   │   ├── /middlewares      # Orta katman yazılımlar (auth, logging, vb.)
+│   │   ├── /utils            # Yardımcı fonksiyonlar, genel kullanımlar
+│   │   └── /config           # Konfigürasyon dosyaları (DB bağlantısı, API ayarları, vb.)
+│   ├── package.json          # Backend bağımlılıkları ve betikler
+│   ├── .env                  # Çevresel değişkenler (DB bağlantıları, API anahtarları, vb.)
+│   └── server.js             # Sunucu başlatma dosyası (veya app.js)
+│
+├── /scripts                  # Otomasyon betikleri (örneğin deploy, test, build işlemleri)
+│   ├── deploy.sh             # Sunucuya dağıtım betiği
+│   └── test.sh               # Test betikleri
+│
+├── /docs                     # Projeye dair dökümantasyonlar (API dokümantasyonu, kullanım kılavuzu, vb.)
+│
+└── README.md                 # Proje açıklaması
+```
+
+---
+
+### 2. **Frontend Klasör Yapısı Açıklamaları**
+
+- **/public**: Statik dosyaların saklandığı yer. HTML dosyaları, faviconlar, robots.txt gibi dosyalar burada bulunur.
+- **/src**: Uygulamanın kaynak kodları.
+  - **/assets**: Görseller, fontlar, stil dosyaları gibi sabit kaynaklar.
+  - **/components**: Tekrarlanabilir UI bileşenleri. (Button, Input, Header gibi)
+  - **/pages**: Farklı sayfaların bileşenleri (Dashboard, Login, vb.)
+  - **/services**: API çağrıları yapan fonksiyonlar. (Axios veya Fetch ile backend API'siyle iletişim)
+  - **/store**: Durum yönetimi için kullanılan dosyalar (Redux, Context API, Vuex vb.)
+  - **/styles**: Global stil dosyaları (CSS veya SCSS).
+  - **/utils**: Yardımcı fonksiyonlar, genel kullanımlar.
+- **package.json**: Frontend projelerinin bağımlılıklarını ve script'lerini yönetir.
+- **webpack.config.js**: Webpack gibi bir bundler kullanıyorsanız, burada proje derleme ayarları bulunur.
+
+---
+
+### 3. **Backend Klasör Yapısı Açıklamaları**
+
+- **/src**: Backend kaynak kodları.
+  - **/controllers**: API endpoint'lerinin işlevsel kodları. Genellikle her endpoint'in bir controller'ı olur.
+  - **/models**: Veritabanı modelleri (örneğin, Mongoose ile MongoDB veya Sequelize ile SQL veritabanı modelleri).
+  - **/routes**: API rotaları ve yönlendirmeleri.
+  - **/services**: İş mantığı ve işlevsellik. Genellikle modeller ve controller'lar arasında veri işleme ve mantık burada yer alır.
+  - **/middlewares**: Orta katman yazılımlar (middleware'ler), örneğin kimlik doğrulama, yetkilendirme, hata yönetimi gibi işlemler burada yer alır.
+  - **/utils**: Yardımcı fonksiyonlar, ortak kodlar. 
+  - **/config**: Veritabanı bağlantıları, API ayarları, sunucu konfigürasyonları burada bulunur.
+- **package.json**: Backend bağımlılıkları ve betikleri içerir.
+- **server.js** veya **app.js**: Sunucunun başlatıldığı dosya. Bu dosyada Express veya başka bir framework ile sunucu başlatılır.
+
+---
+
+### 4. **Ortak Dosyalar ve Yapılar**
+
+- **/scripts**: Projenin dağıtım, test gibi işlerini kolaylaştıran betikler (bash, npm komutları vb.).
+- **/docs**: Projenin dökümantasyonu. Özellikle API'lerin nasıl çalıştığını ve diğer önemli bilgileri içeren belgeler.
+- **README.md**: Proje hakkında genel bilgi, kurulum talimatları ve kullanım açıklamaları.
+
+---
+
+### 5. **Geliştirme ve Yapılandırma**
+
+- **Çevresel Değişkenler**:
+  - Hem frontend hem de backend uygulamanızda `.env` dosyasını kullanarak API anahtarları, veritabanı bağlantıları gibi hassas bilgileri saklayabilirsiniz.
+  
+- **Sunucu İletişimi (API)**:
+  - Frontend, backend ile API üzerinden iletişim kuracaksa, bu yapıyı API çağrıları (`/services` dizininde) içinde yapılandırabilirsiniz.
+
+- **Duruş Yönetimi (State Management)**:
+  - Eğer frontend'de karmaşık durum yönetimi gerekiyorsa, **Redux**, **Context API**, **Vuex** gibi araçları kullanabilirsiniz.
+
+---
+
+Bu klasör yapısı, uygulamanızın geliştirme sürecinde daha modüler, düzenli ve sürdürülebilir bir yapı sağlar. Hem frontend hem de backend kodlarının net bir şekilde ayrılması, her iki tarafın da daha kolay yönetilmesine yardımcı olur.

@@ -1,0 +1,159 @@
+MongoDB'ye bağlanmak için, Node.js backend tarafında MongoDB veritabanını kullanabilmek için birkaç adım takip etmeniz gerekecek. Bu işlem, özellikle MongoDB'nin bir Node.js uygulamasına nasıl entegre edileceği konusunda önemli detaylar içeriyor. Aşağıda, MongoDB'ye bağlanmak ve frontend'inizle nasıl iletişim kuracağınızı adım adım açıklayacağım.
+
+### 1. **MongoDB'yi Backend'e Bağlamak**
+
+Öncelikle, backend tarafında MongoDB'yi kullanmak için `mongoose` veya `mongodb` gibi kütüphanelerden birini kullanmanız gerekiyor. Burada **mongoose**'u kullanacağım, çünkü bu, MongoDB ile çalışmayı daha kolay hale getiren bir kütüphanedir.
+
+#### **Mongoose Kurulumu**
+MongoDB'yi Node.js ile kullanabilmek için önce `mongoose` paketini kurmamız gerekiyor.
+
+```bash
+npm install mongoose
+```
+
+#### **Backend (Node.js - Express) Kodu ile MongoDB Bağlantısı**
+
+MongoDB'ye bağlanmak için, **mongoose** ile bağlantıyı kurmamız gerekecek. İşte örnek bir yapı:
+
+```javascript
+// server.js veya app.js dosyasına ekleyin
+
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
+const app = express();
+const port = 5000;
+
+// MongoDB bağlantı stringi (MongoDB Atlas veya yerel MongoDB kullanabilirsiniz)
+const mongoURI = 'mongodb://localhost:27017/mydatabase'; // Yerel MongoDB örneği
+
+// MongoDB'ye bağlanma
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB\'ye başarıyla bağlanıldı'))
+  .catch(err => console.log('MongoDB bağlantısı başarısız:', err));
+
+// Veritabanı bağlantısı sağlandığında, Express sunucusunun başlatılması
+app.listen(port, () => {
+  console.log(`Sunucu http://localhost:${port} üzerinde çalışıyor`);
+});
+
+// Statik dosyalar için frontend'i sunma
+app.use(express.static(path.join(__dirname, 'frontend')));
+
+// Basit bir API endpoint oluşturma
+app.get('/api/data', (req, res) => {
+  res.json({ message: 'MongoDB ile backend verisi alındı!' });
+});
+```
+
+Yukarıdaki kodda:
+
+- **mongoose.connect** ile MongoDB'ye bağlanıyoruz. `mongoURI`'yi uygun bağlantı dizesi ile değiştirmelisiniz. (Yerel MongoDB veya MongoDB Atlas bağlantısı)
+- Bağlantı başarılı olursa, MongoDB'ye bağlandığını konsola yazdırıyoruz.
+- Express ile bir API endpoint (`/api/data`) oluşturduk. Bu endpoint, MongoDB'den veri alabilir ve frontend'e gönderebilir.
+
+### 2. **MongoDB'ye Bağlanma (Yerel vs. Atlas)**
+
+**Yerel MongoDB:**
+Eğer bilgisayarınızda **MongoDB** yüklüyse, genellikle şu bağlantıyı kullanabilirsiniz:
+```javascript
+const mongoURI = 'mongodb://localhost:27017/mydatabase';
+```
+
+**MongoDB Atlas:**
+MongoDB Atlas üzerinden uzaktan veritabanına bağlanıyorsanız, Atlas'ın sağladığı bağlantı dizesini kullanmanız gerekir. Atlas'ta bir cluster oluşturduktan sonra, veritabanı bağlantı stringini şu şekilde alabilirsiniz:
+```bash
+mongodb+srv://<kullanıcı_adı>:<şifre>@<cluster_adı>.mongodb.net/mydatabase?retryWrites=true&w=majority
+```
+Bu bağlantıyı, `mongoURI` değişkeninize uygun şekilde yerleştirin.
+
+### 3. **Frontend (HTML, CSS, JS)** ve **Backend API** İletişimi
+
+Frontend ile backend arasındaki iletişimi sağlamak için, `fetch` veya `axios` kullanarak API endpoint’lerinden veri alabilirsiniz.
+
+#### **Frontend - Fetch API Kullanarak Backend’e Bağlanma**
+
+Örneğin, **fetch** kullanarak frontend'inizde backend API'sine istek gönderebilirsiniz:
+
+```javascript
+// frontend/script.js dosyasına ekleyin
+
+fetch('http://127.0.0.1:5000/api/data')  // Backend API URL
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);  // Backend'den gelen veriyi konsola yazdırın
+    document.getElementById('backend-message').textContent = data.message;
+  })
+  .catch(error => console.log('Veri çekme hatası:', error));
+```
+
+**Önemli Not:** Bu örnek **CORS** hatalarını engellemek için backend tarafında **CORS** middleware'ini kullanmanız gerekebilir.
+
+### 4. **CORS Ayarları (Backend)**
+
+Eğer frontend ve backend farklı portlarda çalışıyorsa, tarayıcılar **CORS** (Cross-Origin Resource Sharing) hatası verebilir. Bunun için backend tarafında **CORS**'u yapılandırmamız gerekiyor.
+
+#### **CORS Kurulumu**
+
+```bash
+npm install cors
+```
+
+Sonra **server.js** dosyasına şu kodu ekleyin:
+
+```javascript
+const cors = require('cors');
+app.use(cors());  // CORS'u tüm istekler için izin verir
+```
+
+Bu, frontend ve backend arasında düzgün bir iletişim sağlar.
+
+### 5. **Frontend ve Backend'i Çalıştırma**
+
+Artık frontend ve backend'i çalıştırmaya hazırsınız. İşte nasıl çalıştırabilirsiniz:
+
+#### **Backend:**
+1. Backend dizinine gidin:
+   ```bash
+   cd backend
+   ```
+
+2. Sunucuyu **nodemon** ile çalıştırın (bu, sunucunun her değişiklikte yeniden başlatılmasını sağlar):
+   ```bash
+   nodemon app.js
+   ```
+
+   Veya sadece:
+   ```bash
+   node app.js
+   ```
+
+#### **Frontend:**
+Frontend dosyalarını açmak için, bir basit bir HTTP sunucusu kullanabilirsiniz (örneğin, `live-server` gibi).
+
+1. Frontend dizinine gidin:
+   ```bash
+   cd frontend
+   ```
+
+2. **Live-server** veya benzer bir araç ile açabilirsiniz. Eğer **live-server** kurulu değilse, şu şekilde yükleyebilirsiniz:
+   ```bash
+   npm install -g live-server
+   ```
+
+   Sonra:
+   ```bash
+   live-server
+   ```
+
+   Bu, frontend'i tarayıcıda otomatik olarak başlatacaktır (genellikle **http://127.0.0.1:5500** adresinde).
+
+### Özet
+
+- **Backend (Node.js)** ve **MongoDB**'ye bağlanmak için `mongoose` kullanabilirsiniz.
+- MongoDB'ye bağlandıktan sonra, frontend ile **API** üzerinden iletişim kurarak veriyi çekebilirsiniz.
+- Frontend ile backend arasındaki iletişimi sağlamak için **fetch** veya **axios** kullanabilirsiniz.
+- **CORS** hatalarını engellemek için backend tarafında **CORS** middleware'ini kullanın.
+- **Nodemon** ile backend'i geliştirme sürecinde kolayca başlatabilirsiniz.
+
+Bu adımlarla MongoDB'yi backend'e bağlayabilir ve frontend ile veri alışverişi yapabilirsiniz.

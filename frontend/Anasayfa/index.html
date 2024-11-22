@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoşgeldiniz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1 class="logo">Hoşgeldiniz</h1>
+        <nav class="navigation">
+            <a href="/Hakkında/hakkında.html">Hakkında ve İletişim</a>
+        </nav>
+    </header>
+
+    <main class="wrapper">
+        <section class="form-box login">
+            <h2>Giriş</h2>
+            <form action="#" aria-label="Giriş Formu">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" required aria-required="true">
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                    <input type="password" required aria-required="true">
+                    <label for="password">Şifre</label>
+                </div>
+                <button type="submit" class="btn">Giriş</button>
+                <div class="login-register">
+                    <p>Hesabınız yok mu? <a href="#" class="register-link">Kayıt Ol</a></p>
+                </div>
+            </form>
+        </section>
+
+        <section class="form-box register">
+            <h2>Kayıt Ol</h2>
+            <form action="#" aria-label="Kayıt Formu">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="person"></ion-icon></span>
+                    <input type="text" required aria-required="true">
+                    <label for="username">Kullanıcı Adı</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" required aria-required="true">
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                    <input type="password" required aria-required="true">
+                    <label for="password">Şifre</label>
+                </div>
+                <div class="remember-forgot">
+                    <label>
+                        <input type="checkbox" required> 
+                        <a href="/gizlilik_ve_sozlesme/sozlesme.html" target="_blank">Sözleşmeyi ve</a>
+                        <a href="/gizlilik_ve_sozlesme/gizlilik.html" target="_blank">Gizlilik Politikasını kabul ediyorum</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn">Kayıt Ol</button>
+                <div class="login-register">
+                    <p>Hesabınız var mı? <a href="#" class="login-link">Giriş Yap</a></p>
+                </div>
+            </form>
+        </section>
+
+        <!-- Backend'den gelen mesajı göstermek için bir öğe ekliyoruz -->
+         <section>
+            <p id="greeting"></p>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+    <script src="./../script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
